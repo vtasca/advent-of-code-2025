@@ -9,7 +9,7 @@ def get_puzzle_input(path: Path) -> str:
     return raw_input
 
 
-def parse_instructions(instructions: str) -> list:
+def parse_instructions(instructions: str) -> tuple:
     current_arrow_point = 50
     running_count = 0
     rotation_hits = 0
