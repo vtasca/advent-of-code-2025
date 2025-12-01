@@ -40,7 +40,7 @@ def parse_instructions(instructions: str) -> list:
             else:
                 new_arrow_point = arrow_point_sum
 
-            if arrow_point_sum < -1 and current_arrow_point != 0:
+            if arrow_point_sum < 0 and current_arrow_point != 0:
                 rotation_hits += 1
                 print(f"Adding an overclock hit")
 
