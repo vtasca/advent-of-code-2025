@@ -1,7 +1,12 @@
 [project]
 name = "advent-of-code-2025"
 version = "0.1.0"
-description = "Add your description here"
+description = "This repo contains my solutions to the problems presented in the Advent of Code 2025."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.7",
+]
