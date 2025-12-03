@@ -1,6 +1,6 @@
 from pathlib import Path
 
-PUZZLE_INPUT_PATH = Path("day-3/puzzle-input.txt")
+PUZZLE_INPUT_PATH = Path("day-3/sample-puzzle-input.txt")
 
 
 def get_puzzle_input(path: Path) -> str:
@@ -8,11 +8,7 @@ def get_puzzle_input(path: Path) -> str:
         raw_input = f.read()
     return raw_input
 
-if __name__ == "__main__":
-    puzzle_input = get_puzzle_input(PUZZLE_INPUT_PATH)
-
-    sequences = puzzle_input.split('\n')
-
+def calculate_two_digit_joltage(sequences: list) -> list:
     joltages = []
 
     for sequence in sequences:
@@ -34,5 +30,55 @@ if __name__ == "__main__":
         joltage = int(f"{highest_number}{second_highest_number}")
         joltages.append(joltage)
 
+    return joltages
+
+
+def find_highest_number(sequence: str, n=0, collection=None, target=2) -> int:
+
+    if collection is None:
+        collection = {}
+        og_sequence = sequence
+    
+    highest_number = 0
+    if n == target:
+        print(f"Collection: {collection}")
+        ordered_numbers = sorted(collection.values(), key=lambda x: x['index'])
+        joltage = int(''.join([str(x['number']) for x in ordered_numbers]))
+        return joltage
+    else:
+        for index, number in enumerate(sequence):
+            if int(number) >= highest_number:
+                highest_number = int(number)
+                highest_number_index = index + 1
+        n += 1
+        collection[n] = {
+            "number": highest_number,
+            "index": highest_number_index
+        }
+        print(f"Found highest number: {highest_number}")
+        if len(sequence[highest_number_index:]) > 0:
+            print(f"Checking the rest of the sequence: {sequence[highest_number_index:]}")
+            return find_highest_number(sequence[highest_number_index:], n, collection, target)
+        else:
+            print(f"Checking the rest of the sequence: {sequence[:highest_number_index-1]}")
+            return find_highest_number(sequence[:highest_number_index-1], n, collection, target)
+
+if __name__ == "__main__":
+    puzzle_input = get_puzzle_input(PUZZLE_INPUT_PATH)
+
+    sequences = puzzle_input.split('\n')
+
+    joltages = calculate_two_digit_joltage(sequences)
+    print('-' * 100)
     print(f"Joltages: {joltages}")
     print(f"Sum of joltages: {sum(joltages)}")
+    
+    print('-' * 100)
+    all_joltages = []
+    for sequence in sequences:
+        print(sequence)
+        joltage = find_highest_number(sequence, target=2)
+        all_joltages.append(joltage)
+    print(f"Joltages: {all_joltages}")
+    print(f"Sum of all joltages: {sum(all_joltages)}")
+    print('-' * 100)
