@@ -31,6 +31,7 @@ def check_adjacent_coords(matrix: list, i: int, j: int, n: int, symbol='@'):
                 # print(matrix[a][b], end=" ")
                 if matrix[a][b] == '@':
                     paper_count += 1
+
                 # print((a,b), end='')
         # print("\n")
 
@@ -46,15 +47,30 @@ if __name__ == "__main__":
     # The forklifts can only access a roll of paper if there are fewer than four rolls of paper in adjacent positions
     
     print(matrix)
-    reachable_count = 0
-    for i in range(len(matrix)):
-        for j in range(len(matrix[0])):
-            # print(matrix[i][j], end=" ")
-            if matrix[i][j] == '@':
-                paper_count = check_adjacent_coords(matrix, i, j, 1)
-                if paper_count < 4:
-                    reachable_count += 1
-        # print("\n")
-    print(f"Reachable count: {reachable_count}")
 
-    # check_adjacent_coords(matrix, 9, 9, 1)
+    matrix = [list(x) for x in matrix]
+
+    total_removed = 0
+    while(True):
+        reachable_count = 0
+        removable = []
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                # print(matrix[i][j], end=" ")
+                if matrix[i][j] == '@':
+                    paper_count = check_adjacent_coords(matrix, i, j, 1)
+                    if paper_count < 4:
+                        reachable_count += 1
+                        removable.append((i,j))
+            # print("\n")
+    
+        print(f"Reachable count: {reachable_count}")
+        total_removed += reachable_count
+
+        if removable:
+            for i, j in removable:
+                matrix[i][j] = '.'
+        else:
+            break
+
+print(f"Total removed: {total_removed}")
