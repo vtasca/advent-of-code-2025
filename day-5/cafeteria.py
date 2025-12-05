@@ -33,41 +33,26 @@ if __name__ == "__main__":
     
     # print(f'Fresh count: {fresh_count}')
 
-    print(ranges)
-    
+    ranges = sorted(ranges)
+
+    print(f"Starting point: {ranges}")
+
     merged_range = [ranges[0]]
-    for new_pair in ranges[1:]:
-        print(f'merged range: {merged_range}')
-        print(f'analyzing new pair: {new_pair}')
-        new_callup_start = 0
-        new_callup_end = 0
-        to_remove = []
-        for existing_pair in merged_range:
-            print(f'going over existing pair: {existing_pair}')
-            # net smaller pair, add it
-            if new_pair[0] < existing_pair[0] and new_pair[0] < existing_pair[1] \
-                and new_pair[1] < existing_pair[0] and new_pair[1] < existing_pair[1]:
-                merged_range.append(new_pair)
-                print(f'appending new net smaller pair: {new_pair}')
-            # net larger pair, add it
-            elif new_pair[0] > existing_pair[0] and new_pair[0] > existing_pair[1] \
-                and new_pair[1] > existing_pair[0] and new_pair[1] > existing_pair[1]:
-                merged_range.append(new_pair)
-                print(f'appending new net larger pair: {new_pair}')
-            # extend a pair
-            if new_pair[0] > existing_pair[0] and new_pair[0] < existing_pair[1]:
-                new_callup_start = existing_pair[0]
-                to_remove.append(existing_pair)
-            if new_pair[1] > existing_pair[0] and new_pair[1] < existing_pair[1]:
-                new_callup_end = existing_pair[1]
-                to_remove.append(existing_pair)
-            
-        if new_callup_start and new_callup_end:
-            print(f'Adding new callup: {[new_callup_start, new_callup_end]}')
-            merged_range.append([new_callup_start, new_callup_end])
+    for index, pair in enumerate(ranges[1:]):
+        # is the new pair net larger
+        if pair[0] > merged_range[-1][1] and pair[1] > merged_range[-1][1]:
+            merged_range.append(pair)
 
-        print(f'removals: {to_remove}')
-        for removal in to_remove:
-            merged_range.remove(removal)
+        # is only the right part larger
+        if pair[0] < merged_range[-1][1] and pair[1] > merged_range[-1][1]:
+            merged_range[-1][1] = pair[1]
 
-    print(f'Final ranges: {merged_range}')
+        print(f"Step {index}: {merged_range}")
+
+    print(f'Final merged range: {merged_range}')
+
+    target = 0
+    for range in merged_range:
+        target += range[1] - range[0] + 1
+
+    print(f"Total: {target}")
