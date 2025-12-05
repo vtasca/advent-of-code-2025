@@ -44,7 +44,7 @@ if __name__ == "__main__":
             merged_range.append(pair)
 
         # is only the right part larger
-        if pair[0] < merged_range[-1][1] and pair[1] > merged_range[-1][1]:
+        if pair[0] <= merged_range[-1][1] and pair[1] > merged_range[-1][1]:
             merged_range[-1][1] = pair[1]
 
         print(f"Step {index}: {merged_range}")
