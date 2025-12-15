@@ -1,7 +1,7 @@
 from pathlib import Path
 from collections import defaultdict
 
-PUZZLE_INPUT_PATH = Path("day-9/sample-puzzle-input.txt")
+PUZZLE_INPUT_PATH = Path("day-9/puzzle-input.txt")
 
 
 def get_puzzle_input(path: Path) -> str:
@@ -40,26 +40,15 @@ if __name__ == '__main__':
 
     coords = [tuple(map(int, line.split(','))) for line in puzzle_input.splitlines()]
 
-    coord_dict = coords_to_dict(puzzle_input)
+    # print(coords)
 
-    coords_x = [int(line.split(',')[0]) for line in puzzle_input.splitlines()]
-    coords_y = [int(line.split(',')[1]) for line in puzzle_input.splitlines()]
+    max_area = 0
+    for index, coord_1 in enumerate(coords):
+        for coord_2 in coords[index:]:
+            area = calc_area(coord_1, coord_2)
+            if area > max_area:
+                max_area = area
+                corners = [coord_1, coord_2]
 
-    print(sorted(coords))
-    print(coord_dict)
 
-    min_x = min(coords_x)
-    max_x = max(coords_x)
-
-    max_distance = 0
-    for min_y in coord_dict[min_x]:
-        for max_y in coord_dict[max_x]:
-            distance = abs(min_y - max_y)
-            if distance > max_distance:
-                max_distance = distance
-                corners = [[min_x, min_y], [max_x, max_y]]
-
-    area = calc_area(corners[0], corners[1])
-        
-
-    print(f'Found largest rectangle of area {area} between points {corners[0]} and {corners[1]}')
+    print(f'Found largest rectangle of area {max_area} between points {corners[0]} and {corners[1]}')
