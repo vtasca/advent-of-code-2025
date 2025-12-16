@@ -42,31 +42,30 @@ if __name__ == '__main__':
 
     coord_dict = coords_to_dict(puzzle_input)
 
-    print(coords)
-    print(coord_dict)
+    # print(coords)
+    # print(coord_dict)
 
     # let's first create the fence to check for belonging
-    fence = []
-    for (x1, y1), (x2, y2) in zip(coords, coords[1:]):
-        fence.append([x1, y1])
-        print(f'added checkpoint: {[x1, y1]}')
-        if x1 != x2:
-            if x1 < x2:
-                for x in range(min(x1, x2) + 1, max(x1, x2)):
-                    fence.append([x, y1])
-            elif x1 > x2:
-                for x in range(max(x1, x2) - 1, min(x1, x2), -1):
-                    fence.append([x, y1])
+    closed_coords = coords + [coords[0]]
 
-        if y1 != y2:
-            if y1 < y2:
-                for y in range(min(y1, y2) + 1, max(y1, y2)):
-                    fence.append([x1, y])
-            elif y1 > y2:
-                for y in range(max(y1, y2) - 1, min(y1, y2), -1):
-                    fence.append([x1, y])
-    
-        print(f"Fence: {fence}")
+    rows = defaultdict(set)
+
+    for (x1, y1), (x2, y2) in zip(closed_coords, closed_coords[1:]):
+        rows[y1].add(x1)
+
+        if x1 == x2:  # vertical
+            step = 1 if y2 > y1 else -1
+            for y in range(y1 + step, y2 + step, step):
+                rows[y].add(x1)
+
+        elif y1 == y2:  # horizontal
+            step = 1 if x2 > x1 else -1
+            for x in range(x1 + step, x2 + step, step):
+                rows[y1].add(x)
+
+    rows = {y: sorted(xs) for y, xs in rows.items()}
+
+    print(f"Rows: {rows}")
 
 
 
